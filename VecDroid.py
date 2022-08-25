@@ -1,7 +1,7 @@
 import math
 
 class Angle:
-	def _init_(self,number):
+	def __init__(self,number):
 		self.num=number
 		self.cut()
 	def cut(self):
@@ -9,17 +9,17 @@ class Angle:
 		self.num-=int(self.num)
 		if self.num <0: self.num=1+self.num
 		self.num*=360	
-	def _add_(self,second):
+	def __add__(self,second):
 		ret=Angle(second.num)
 		ret.num+=self.num
 		ret.cut()
 		return ret
-	def _sub_(self,second):
+	def __sub__(self,second):
 		ret=Angle(second.num)
 		ret.num=self.num-ret.num
 		ret.cut()
 		return ret
-	def _repr_(self):
+	def __repr__(self):
 		return "Angle ("+str(self.num)+"°)"
 		
 #------------------------------------
@@ -34,7 +34,7 @@ def bounds2vec(bounds):
     elif y==0 and x<0: direction=Angle(270)
     elif y > 0: direction=Angle(math.degrees(math.atan(x/y)))
     elif y < 0: direction=Angle(math.degrees(math.atan(x/y)))+Angle(180)
-    return direction,math.sqrt(x*2+y*2)
+    return direction,math.sqrt(x**2+y**2)
 
 def list2vector(arr):
 	last_hypot=arr[0]
@@ -85,35 +85,34 @@ def sub_arr(arr1,arr2):
 #------------------------------------
 	
 class Vector:
-	def _init_(self,list=None,angles=None,len=None):
-		
+	def __init__(self,list=None,angles=None,len=None):
 		assert not (len==None and angles==None and list==None)
 		if list!=None: self.angles,self.len=list2vector(list)
 		if angles!=None:
 			self.angles=angles
 		if len!=None:
 			self.len=len
-	def _add_(self,second):
+	def __add__(self,second):
 		
 		ar1=vec2arr(self.angles+[self.len])
 		ar2=vec2arr(second.angles+[second.len])
 		ar1=sum_arr(ar1,ar2)
 		return Vector(ar1)
-	def _sub_(self,second):
+	def __sub__(self,second):
 		
 		ar1=vec2arr(self.angles+[self.len])
 		ar2=vec2arr(second.angles+[second.len])
 		ar1=sub_arr(ar1,ar2)
 		return Vector(ar1)
-	def _mul_(self,num):
+	def __mul__(self,num):
 		new=self
 		new.len*=num
 		return new
-	def _truediv_(self,num):
+	def __truediv__(self,num):
 		new=self
 		new.len/=num
 		return new
-	def _repr_(self):
+	def __repr__(self):
 		return str(len(self.angles)+1)+"d Vector with len "+str(self.len)+" and directions:\n"+str(self.angles)
-	def _iter_(self):
+	def __iter__(self):
 		return iter(vec2arr(self.angles+[self.len]))
